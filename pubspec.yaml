@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+   
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -40,6 +41,8 @@ dependencies:
   web_socket_channel: ^2.2.0
   stomp_dart_client: ^1.0.3
   # sockjs_client: ^0.4.0
+  google_fonts: ^4.0.3  # Make sure to use the latest version
+  cached_network_image: ^3.2.1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +72,7 @@ flutter:
     - assets/images/Sports1.jpg
     - assets/images/Sports2.jpg
     - assets/images/Sports3.jpg
+    - assets/images/Elevate_Logo.jpeg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

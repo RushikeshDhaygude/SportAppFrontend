@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sports/Screens/Admin/Dashboard.dart';
+import 'package:flutter_sports/Screens/Organization/Dashboard.dart';
 import 'Registration.dart'; // Import the RegistrationPage
 
 class LoginPage extends StatefulWidget {

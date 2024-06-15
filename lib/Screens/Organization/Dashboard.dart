@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sports/Screens/Admin/Event.dart';
-import 'package:flutter_sports/Screens/Admin/Fixture.dart';
-import 'package:flutter_sports/Screens/Admin/Scorecards.dart';
+import 'package:flutter_sports/Screens/Organization/Event.dart';
+import 'package:flutter_sports/Screens/Organization/Fixture.dart';
+import 'package:flutter_sports/Screens/Organization/Scorecards.dart';
 import 'Organization.dart';
 
 class AdminDashboard extends StatefulWidget {
