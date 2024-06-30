@@ -1,4 +1,3 @@
-// import 'dart:convert';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,8 +6,6 @@ import 'package:http/http.dart' as http;
 import '../Api/api_constants.dart';
 
 class MatchListWidget extends StatelessWidget {
-  // final String apiUrl = 'http://192.168.65.73:8080/api/fixtures'; // Update with your API URL
-
   Future<List<dynamic>> fetchMatches() async {
     final response = await http.get(Uri.parse(ApiConstants.UpcomingMatchesApiUrl));
 
@@ -31,13 +28,16 @@ class MatchListWidget extends StatelessWidget {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text('No matches available'));
         } else {
-          return SizedBox(
-            height: 250.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: snapshot.data!.map((match) {
-                return buildMatchCard(match);
-              }).toList(),
+          return Padding(
+            padding: const EdgeInsets.all(8.0), // Add padding around the ListView
+            child: SizedBox(
+              height: 250.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: snapshot.data!.map((match) {
+                  return buildMatchCard(match);
+                }).toList(),
+              ),
             ),
           );
         }
@@ -50,13 +50,13 @@ class MatchListWidget extends StatelessWidget {
     String location = match['event']['location'];
     String dateTime = match['dateTime'];
     String date = dateTime.split('T')[0];
-    String time = dateTime.split('T')[1];
+    String time = dateTime.split('T')[1].split('.')[0]; // Extract time without milliseconds
     String team1Name = match['team1']['teamName'].trim();
     String team2Name = match['team2']['teamName'].trim();
     String gender = match['gender'];
 
     return Container(
-      width: 210,
+      width: 200,
       margin: EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -75,39 +75,52 @@ class MatchListWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16),
-            Text(
-              eventName,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            buildHeader(eventName),
             SizedBox(height: 14),
-            Text(
-              'Location: $location',
-              style: TextStyle(fontSize: 16),
-            ),
+            buildDetailRow(Icons.location_on, location),
             SizedBox(height: 8),
-            Text(
-              'Date: $date',
-              style: TextStyle(fontSize: 16),
-            ),
+            buildDetailRow(Icons.calendar_today, date),
             SizedBox(height: 8),
-            Text(
-              'Time: $time',
-              style: TextStyle(fontSize: 16),
-            ),
+            buildDetailRow(Icons.access_time, time),
             SizedBox(height: 8),
-            Text(
-              '$team1Name vs $team2Name',
-              style: TextStyle(fontSize: 16),
-            ),
+            buildDetailRow(Icons.sports_soccer, '$team1Name vs $team2Name'),
             SizedBox(height: 8),
-            Text(
-              'Gender: $gender',
-              style: TextStyle(fontSize: 16),
-            ),
+            buildDetailRow(Icons.person, 'Gender: $gender'),
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildHeader(String eventName) {
+    return Row(
+      children: [
+        Icon(Icons.event, color: Colors.blue),
+        SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            eventName,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildDetailRow(IconData icon, String detail) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.blue),
+        SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            detail,
+            style: TextStyle(fontSize: 16),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 
-class ImageGalleryScreen extends StatefulWidget {
+class ImageFetcherScreen extends StatefulWidget {
   @override
-  _ImageGalleryScreenState createState() => _ImageGalleryScreenState();
+  _ImageFetcherScreenState createState() => _ImageFetcherScreenState();
 }
 
-class _ImageGalleryScreenState extends State<ImageGalleryScreen> {
-  List<dynamic> images = [];
+class _ImageFetcherScreenState extends State<ImageFetcherScreen> {
+  List<String> imagePaths = [];
+  final String serverBaseUrl =
+      'http://192.168.43.56:8000'; // Replace with your local server's base URL and port
 
   @override
   void initState() {
@@ -18,49 +20,45 @@ class _ImageGalleryScreenState extends State<ImageGalleryScreen> {
   }
 
   Future<void> fetchImages() async {
-    final response = await http.get(Uri.parse('http://192.168.106.73:8080/api/galleries'));
+    final response = await http.get(Uri.parse(
+        '$serverBaseUrl/api/galleries')); // Replace with your actual API endpoint
 
     if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+
       setState(() {
-        images = json.decode(response.body);
+        imagePaths = data.map((item) => item['imagePath'] as String).toList();
       });
     } else {
       throw Exception('Failed to load images');
     }
   }
 
+  String getFullImagePath(String relativePath) {
+    return '$serverBaseUrl/$relativePath'.replaceAll('\\', '/');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Gallery'),
+        title: Text('Image Fetcher'),
       ),
-      body: images.isEmpty
+      body: imagePaths.isEmpty
           ? Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
-                itemCount: images.length,
-                itemBuilder: (context, index) {
-                  final image = images[index];
-                  final imageUrl = 'http://192.168.106.73:8080/' + image['imagePath'].replaceAll('\\', '/');
-                  return Card(
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                },
-              ),
+          : ListView.builder(
+              itemCount: imagePaths.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CachedNetworkImage(
+                    imageUrl: getFullImagePath(imagePaths[index]),
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                );
+              },
             ),
     );
   }
 }
-
