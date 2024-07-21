@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sports/Api/api_constants.dart';
 import 'package:flutter_sports/Screens/Organization/Dashboard.dart';
-import 'Registration.dart'; // Import the RegistrationPage
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,9 +12,43 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _organizationIdController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    final String organizationId = _organizationIdController.text;
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    final response = await http.post(
+      Uri.parse(ApiConstants.LoginApi),
+      body: {
+        'organizationId': organizationId,
+        'email': email,
+        'password': password,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      final String token = responseBody['token'];
+      final Map<String, dynamic> organization = responseBody['organization'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+      await prefs.setString('organization', json.encode(organization));
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Login successful')));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AdminDashboard(organization: organization)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid credentials')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,65 +57,30 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Login'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AdminDashboard()),
-                    );
-                  }
-                },
-                child: Text('Login'),
-              ),
-              SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  // Navigate to the registration page when the label is tapped
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegistrationPage()),
-                  );
-                },
-                child: Text(
-                  'Don\'t have an account? Register',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ],
-          ),
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _organizationIdController,
+              decoration: InputDecoration(labelText: 'Organization ID'),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _login,
+              child: Text('Login'),
+            ),
+          ],
         ),
       ),
     );

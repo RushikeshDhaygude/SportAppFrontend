@@ -53,6 +53,8 @@ class MatchListWidget extends StatelessWidget {
     String time = dateTime.split('T')[1].split('.')[0]; // Extract time without milliseconds
     String team1Name = match['team1']['teamName'].trim();
     String team2Name = match['team2']['teamName'].trim();
+    String team1LogoPath = match['team1']['teamLogoPath'];
+    String team2LogoPath = match['team2']['teamLogoPath'];
     String gender = match['gender'];
 
     return Container(
@@ -83,7 +85,7 @@ class MatchListWidget extends StatelessWidget {
             SizedBox(height: 8),
             buildDetailRow(Icons.access_time, time),
             SizedBox(height: 8),
-            buildDetailRow(Icons.sports_soccer, '$team1Name vs $team2Name'),
+            buildTeamRow(team1Name, team1LogoPath, team2Name, team2LogoPath),
             SizedBox(height: 8),
             buildDetailRow(Icons.person, 'Gender: $gender'),
           ],
@@ -118,6 +120,44 @@ class MatchListWidget extends StatelessWidget {
             detail,
             style: TextStyle(fontSize: 16),
             overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildTeamRow(String team1Name, String team1LogoPath, String team2Name, String team2LogoPath) {
+    return Row(
+      children: [
+        ClipOval(
+          child: Image.network(
+            team1LogoPath,
+            width: 24,
+            height: 24,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(Icons.image_not_supported, size: 24);
+            },
+          ),
+        ),
+        SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            '$team1Name vs $team2Name',
+            style: TextStyle(fontSize: 16),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        SizedBox(width: 8),
+        ClipOval(
+          child: Image.network(
+            team2LogoPath,
+            width: 24,
+            height: 24,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Icon(Icons.image_not_supported, size: 24);
+            },
           ),
         ),
       ],

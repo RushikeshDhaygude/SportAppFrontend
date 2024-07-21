@@ -127,9 +127,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_sports/Screens/Gallery.dart';
+import 'package:flutter_sports/Widgets/gallery_widget.dart';
 import '../Widgets/drawer.dart';
 import '../Widgets/event_list_widget.dart';
-import '../Widgets/gallery_widget.dart';
 import '../Widgets/live_score_card.dart';
 import '../Widgets/match_list_widget.dart';
 import '../Widgets/NotificationIconWidget.dart';
@@ -243,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 16),
             EventListWidget(),
             SizedBox(height: 16),
-            GalleryWidget(),
+            GalleryWidgetStatic(),
             SizedBox(height: 16),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),

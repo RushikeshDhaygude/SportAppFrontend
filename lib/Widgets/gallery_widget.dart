@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GalleryWidget extends StatelessWidget {
+class GalleryWidgetStatic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

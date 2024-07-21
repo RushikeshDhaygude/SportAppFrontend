@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sports/Screens/LiveView.dart';
 import 'package:flutter_sports/Screens/Organization/LiveStream.dart';
+import 'package:flutter_sports/Screens/Organization/LocationScreenOrg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_sports/Screens/Event.dart';
 import 'package:flutter_sports/Screens/Registration.dart';
-import 'package:flutter_sports/Screens/LocationScreen.dart';
-import 'package:flutter_sports/Screens/ContactPage.dart';
+
 
 import '../Screens/Gallery.dart';
 
@@ -61,19 +60,23 @@ class DrawerWidget extends StatelessWidget {
                 ],
               ),
             ),
-            buildDrawerItem(context, 'Gallery', Icons.photo_album, () {
+            buildDrawerItem(context, 'Gallery', Icons.image, () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ImageFetcherScreen()),
+                MaterialPageRoute(
+                    builder: (context) => GalleryWidget(
+                          isAdmin: false,
+                        )),
               );
             }),
-            buildDrawerItem(context, 'Map', Icons.map, () {
+            buildDrawerItem(context, 'Map', Icons.location_pin, () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LocationMapScreen()),
+                MaterialPageRoute(
+                    builder: (context) => LocationMapScreen(isAdmin: false)),
               );
             }),
-            buildDrawerItem(context, 'Dashboard', Icons.dashboard, () {
+            buildDrawerItem(context, 'Highlights', Icons.video_camera_back, () {
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(builder: (context) => LivePage()),
@@ -82,19 +85,23 @@ class DrawerWidget extends StatelessWidget {
             buildDrawerItem(context, 'Events', Icons.event, () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EventScreen()),
+                MaterialPageRoute(
+                    builder: (context) => EventScreen(
+                          isAdmin: false,
+                        )),
               );
             }),
-            buildDrawerItem(context, 'Contact', Icons.contact_mail, () {
+            buildDrawerItem(context, 'Live Streaming', Icons.live_tv, () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyHomePage()),
+                MaterialPageRoute(
+                    builder: (context) => MyHomePage(isAdmin: false)),
               );
             }),
             buildDrawerItem(context, 'Login', Icons.login, () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RegistrationPage()),
+                MaterialPageRoute(builder: (context) => RegisterPage()),
               );
             }),
           ],

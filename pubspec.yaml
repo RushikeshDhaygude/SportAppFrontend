@@ -49,6 +49,9 @@ dependencies:
   firebase_core: ^3.1.0
   intl: ^0.19.0
   zego_uikit_prebuilt_live_streaming: ^3.8.9
+  shared_preferences: ^2.0.6
+  # image_picker: ^1.1.2
+  image_picker: ^0.8.8
   # http: ^0.13.3
 
 dependency_overrides:
