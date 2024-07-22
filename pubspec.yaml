@@ -52,6 +52,7 @@ dependencies:
   shared_preferences: ^2.0.6
   # image_picker: ^1.1.2
   image_picker: ^0.8.8
+  video_player: ^2.1.10
   # http: ^0.13.3
 
 dependency_overrides:

@@ -47,7 +47,7 @@ class _GalleryWidgetState extends State<GalleryWidget> {
 
     try {
       final response = await http.get(
-        Uri.parse('https://sportappapi-production.up.railway.app/api/galleries/organization/$orgId'),
+        Uri.parse('https://sportappapi-production.up.railway.app/api/galleries'),
       );
 
       if (response.statusCode == 200) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sports/Screens/Event.dart';
 import 'package:flutter_sports/Screens/Gallery.dart';
+import 'package:flutter_sports/Screens/HighlightsScreen.dart';
 import 'package:flutter_sports/Screens/Organization/LiveStream.dart';
 import 'package:flutter_sports/Screens/Organization/LocationScreenOrg.dart';
 import 'package:flutter_sports/Screens/Organization/Announcements.dart';
@@ -105,6 +106,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => MyHomePage(isAdmin: true)),
+                  );
+                }),
+                _buildMenuItem('Go Live', Icons.live_tv, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HighlightsScreen(isAdmin: true)),
                   );
                 }),
                 _buildMenuItem('Announcements', Icons.alarm, () {

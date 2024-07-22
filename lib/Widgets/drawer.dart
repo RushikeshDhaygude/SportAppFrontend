@@ -130,6 +130,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_sports/Screens/HighlightsScreen.dart';
 import 'package:flutter_sports/Screens/Organization/Dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Screens/Organization/LiveStream.dart';
@@ -208,10 +209,10 @@ class DrawerWidget extends StatelessWidget {
               );
             }),
             buildDrawerItem(context, 'Highlights', Icons.video_camera_back, () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => LivePage()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HighlightsScreen(isAdmin:false)),
+              );
             }),
             buildDrawerItem(context, 'Events', Icons.event, () {
               Navigator.push(
